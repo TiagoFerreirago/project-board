@@ -3,6 +3,7 @@ package com.board.persistence.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.board.model.BoardColumnEntity;
 import com.mysql.cj.jdbc.StatementImpl;
@@ -31,6 +32,11 @@ public class BoardColumnDAO {
 			 }
 			 return entity;
 		 }
+	}
+
+	public List<BoardColumnEntity> findByBoardId(Long id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

@@ -1,8 +1,6 @@
 package com.board.model;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BlockEntity {
 
@@ -11,7 +9,6 @@ public class BlockEntity {
 	 private String blockReason;
 	 private OffsetDateTime unblockedAt;
 	 private String unblockReason;
-	 private List<BoardColumnEntity> boardColumns = new ArrayList<BoardColumnEntity>();
 	 
 	 
 	
@@ -45,12 +42,5 @@ public class BlockEntity {
 	public void setUnblockReason(String unblockReason) {
 		this.unblockReason = unblockReason;
 	}
-	public List<BoardColumnEntity> getBoardColumns() {
-		return boardColumns;
-	}
-	public void setBoardColumns(List<BoardColumnEntity> boardColumns) {
-		this.boardColumns = boardColumns;
-	}
-	 
-	 
+	
 }
