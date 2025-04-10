@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.board.model.BoardEntity;
 import com.board.persistence.dao.BoardDAO;
 
 public class BoardService {
@@ -16,7 +17,11 @@ public class BoardService {
 			this.connection = connection;
 		}
 	 
+	 /*public BoardEntity insert(BoardEntity entity) throws SQLException {
 	 
+		 
+	 
+	 }*/
 	 public boolean delete(Long id) throws SQLException {
 		 
 		 BoardDAO dao = new BoardDAO(connection);
