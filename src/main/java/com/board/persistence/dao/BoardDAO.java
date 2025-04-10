@@ -13,10 +13,13 @@ import com.mysql.cj.jdbc.StatementImpl;
 
 public class BoardDAO {
 	
-	@Autowired
 	private Connection connection;
 	
 	
+	public BoardDAO(Connection connection) {
+		this.connection = connection;
+	}
+
 	public BoardEntity insert(BoardEntity entity) throws SQLException {
 		var sql = "INSERT INTO BOARDS (name) VALUES (?);";
 		try(PreparedStatement statement = connection.prepareStatement(sql)){
