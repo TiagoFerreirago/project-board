@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.board.model.BoardColumnEntity;
 import com.board.model.BoardColumnKindEnum;
 import com.board.model.BoardEntity;
+import com.board.persistence.dao.ConnectionConfig;
 import com.board.service.BoardQueryService;
 import com.board.service.BoardService;
 
@@ -38,10 +39,10 @@ public class MainMenu implements CommandLineRunner {
         }
     }
 	
-	private void deleteBoard() {
+	private void deleteBoard() throws SQLException {
 		System.out.println("Informe o id do board que será excluido");
 		Long id = scanner.nextLong();
-		try(var connection = getConnection()){
+		try(var connection = ConnectionConfig.getConnection()){
 			BoardService service = new BoardService(connection);
 			if(service.delete(id)) {
 				System.out.printf("O board %s foi excluido\n", id);
@@ -53,7 +54,7 @@ public class MainMenu implements CommandLineRunner {
 		}
 	}
 
-	private void createBoard() {
+	private void createBoard() throws SQLException {
 		BoardEntity entity = new BoardEntity();
 		System.out.println("Informe o nome do seu board");
         entity.setName(scanner.next());
@@ -87,7 +88,7 @@ public class MainMenu implements CommandLineRunner {
         
         entity.setBoardColumns(columns);
         
-        try (var connection = getConnection(){
+        try (var connection = ConnectionConfig.getConnection()){
         	BoardService boardService = new BoardService(connection);
         	boardService.insert(entity);
         }
@@ -106,7 +107,7 @@ public class MainMenu implements CommandLineRunner {
 	private void selectBoard() {
 		 System.out.println("Informe o id do board que deseja selecionar");
 		 Long id = scanner.nextLong();
-		 try(var connection = getConnection()){
+		 try(var connection = ConnectionConfig.getConnection()){
 			 BoardQueryService queryService = new BoardQueryService(connection);
 	         var optional = queryService.findById(id);
 	         optional.ifPresentOrElse(b -> new BoardMenu(b).execute(),
