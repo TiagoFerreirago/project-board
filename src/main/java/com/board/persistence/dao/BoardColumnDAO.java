@@ -2,10 +2,13 @@ package com.board.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.board.model.BoardColumnEntity;
+import com.board.model.BoardColumnKindEnum;
 import com.mysql.cj.jdbc.StatementImpl;
 
 public class BoardColumnDAO {
@@ -34,9 +37,24 @@ public class BoardColumnDAO {
 		 }
 	}
 
-	public List<BoardColumnEntity> findByBoardId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BoardColumnEntity> findByBoardId(Long id) throws SQLException {
+		List<BoardColumnEntity> entities = new ArrayList<BoardColumnEntity>();
+		String sql = "SELECT id, name, `order` FROM BOARDS_COLUMNS WHERE board_id = ? ORDER BY `order`";
+		
+		try(PreparedStatement statement = connection.prepareStatement(sql)){
+			statement.setLong(1, id);
+			ResultSet resultSet = statement.executeQuery();
+			
+			while(resultSet.next()) {
+				BoardColumnEntity entity = new BoardColumnEntity();
+				entity.setId(resultSet.getLong("id"));
+				entity.setName(resultSet.getString("name"));
+				entity.setOrder(resultSet.getInt("order"));
+				entity.setKind(BoardColumnKindEnum.findByName(resultSet.getString("kind")));
+				entities.add(entity);
+			}
+		}
+		return entities;
 	}
 
 
