@@ -3,8 +3,10 @@ package com.board;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import com.board.model.BoardColumnEntity;
 import com.board.model.BoardEntity;
 import com.board.persistence.dao.ConnectionConfig;
+import com.board.service.BoardColumnQueryService;
 import com.board.service.BoardQueryService;
 
 public class BoardMenu {
@@ -97,8 +99,28 @@ public class BoardMenu {
 		
 	}
 
-	private void showColumn() {
+	private void showColumn() throws SQLException {
 		
+		var columnsIds = boardEntity.getBoardColumns().stream().map(BoardColumnEntity::getId).toList();
+		
+		Long selectedColumn = -1L;
+		while(!columnsIds.contains(selectedColumn)) {
+			System.out.printf("Escolha uma coluna do board %s\n", boardEntity.getName());
+			boardEntity.getBoardColumns().forEach(c -> 
+			System.out.printf("%s - %s [%s]\n", c.getId(), c.getName(), c.getKind()));
+			selectedColumn = scanner.nextLong();
+		}
+		try(var connection = ConnectionConfig.getConnection()){
+			var column = new BoardColumnQueryService(connection).findById(selectedColumn);
+			
+			column.ifPresent(co -> {
+				System.out.printf("Coluna %s tipo %s\n", co.getName(), co.getKind());
+				
+				co.getCards().forEach(ca -> System.out.printf("Card %s - %s\nDescrição: %s",
+                        ca.getId(), ca.getTitle(), ca.getDescription()));
+			});
+			
+		}
 		
 	}
 
