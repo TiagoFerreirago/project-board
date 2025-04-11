@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-
 import com.board.model.BoardColumnEntity;
 import com.board.model.BoardColumnKindEnum;
 import com.board.model.BoardEntity;
@@ -15,8 +12,7 @@ import com.board.persistence.dao.ConnectionConfig;
 import com.board.service.BoardQueryService;
 import com.board.service.BoardService;
 
-@Component
-public class MainMenu implements CommandLineRunner {
+public class MainMenu{
 	
 	private Scanner scanner = new Scanner(System.in);
 
@@ -83,7 +79,7 @@ public class MainMenu implements CommandLineRunner {
         
         System.out.println("Informe o nome da coluna de cancelamento do baord");
         String cancelColumnName = scanner.next();
-        BoardColumnEntity cancelColumn = createColumn(cancelColumnName, BoardColumnKindEnum.CANCEL, addittionColumns + 1);
+        BoardColumnEntity cancelColumn = createColumn(cancelColumnName, BoardColumnKindEnum.CANCEL, addittionColumns + 2);
         columns.add(cancelColumn);
         
         entity.setBoardColumns(columns);
@@ -104,7 +100,7 @@ public class MainMenu implements CommandLineRunner {
 		return boardColumn;
 	}
 
-	private void selectBoard() {
+	private void selectBoard() throws SQLException {
 		 System.out.println("Informe o id do board que deseja selecionar");
 		 Long id = scanner.nextLong();
 		 try(var connection = ConnectionConfig.getConnection()){
@@ -115,10 +111,5 @@ public class MainMenu implements CommandLineRunner {
 		 }
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-
-		
-	}
 
 }

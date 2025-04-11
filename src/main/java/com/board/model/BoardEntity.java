@@ -3,10 +3,13 @@ package com.board.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringExclude;
+
 public class BoardEntity {
 
 	 private Long id;
 	 private String name;
+	 @ToStringExclude
 	 private List<BoardColumnEntity> boardColumns = new ArrayList<BoardColumnEntity>();
 	 
 	 
