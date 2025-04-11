@@ -1,14 +1,17 @@
 package com.board;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.board.model.BoardEntity;
+import com.board.persistence.dao.ConnectionConfig;
+import com.board.service.BoardQueryService;
 
 public class BoardMenu {
 	
 	private BoardEntity boardEntity;
 	
-	private Scanner scanner = new Scanner(System.in);
+	private Scanner scanner = new Scanner(System.in).useDelimiter("\n");
 
 	public BoardMenu(BoardEntity boardEntity) {
 
@@ -17,6 +20,7 @@ public class BoardMenu {
 
 	public void execute() {
 		
+		try {
 		System.out.printf("Bem vindo ao board %s, selecione a operação desejada", boardEntity.getId());
 		
 		int option = -1;
@@ -47,8 +51,13 @@ public class BoardMenu {
              case 9 -> System.out.println("Voltando para o menu anterior");
              case 10 -> System.exit(0);
              default -> System.out.println("Opção inválida, informe uma opção do menu");
-         }
-      }
+	         }
+			}
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+			System.exit(0);
+		}
    }
 
 	private void createCard() {
@@ -76,8 +85,15 @@ public class BoardMenu {
 		
 	}
 
-	private void showBoard() {
-		
+	private void showBoard() throws SQLException {
+		try(var connection = ConnectionConfig.getConnection()){
+			var optional = new BoardQueryService(connection).showBoardDetails(boardEntity.getId());
+			optional.ifPresent(b -> {
+				 System.out.printf("Board [%s,%s]\n", b.id(), b.name());
+				 b.columns().forEach( c -> 
+				 System.out.printf("Coluna [%s] tipo: [%s] tem %s cards\n", c.name(), c.kind(), c.cardsAmout()));
+			});
+		}
 		
 	}
 

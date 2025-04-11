@@ -14,7 +14,7 @@ import com.board.service.BoardService;
 
 public class MainMenu{
 	
-	private Scanner scanner = new Scanner(System.in);
+	private Scanner scanner = new Scanner(System.in).useDelimiter("\n");
 
 	public void execute() throws SQLException{
 		System.out.println("Bem vindo ao gerenciador de boards, escolha a opção desejada");
