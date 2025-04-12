@@ -25,7 +25,7 @@ public class BoardMenu {
 	public void execute() {
 		
 		try {
-		System.out.printf("Bem vindo ao board %s, selecione a operação desejada", boardEntity.getId());
+		System.out.printf("Bem vindo ao board %s, selecione a operação desejada\n", boardEntity.getId());
 		
 		int option = -1;
 		
