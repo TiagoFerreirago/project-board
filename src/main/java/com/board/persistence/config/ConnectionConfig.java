@@ -1,4 +1,4 @@
-package com.board.persistence.dao;
+package com.board.persistence.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

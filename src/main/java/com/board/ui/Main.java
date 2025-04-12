@@ -3,7 +3,7 @@ package com.board.ui;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.board.persistence.dao.ConnectionConfig;
+import com.board.persistence.config.ConnectionConfig;
 
 @Component
 public class Main implements CommandLineRunner {

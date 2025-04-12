@@ -8,7 +8,7 @@ import java.util.Scanner;
 import com.board.model.BoardColumnEntity;
 import com.board.model.BoardColumnKindEnum;
 import com.board.model.BoardEntity;
-import com.board.persistence.dao.ConnectionConfig;
+import com.board.persistence.config.ConnectionConfig;
 import com.board.service.BoardQueryService;
 import com.board.service.BoardService;
 

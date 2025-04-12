@@ -1,4 +1,6 @@
-package com.board.model;
+package com.board.dto;
+
+import com.board.model.BoardColumnKindEnum;
 
 public record BoardColumnInfoDTO(Long id,
 		int order,
