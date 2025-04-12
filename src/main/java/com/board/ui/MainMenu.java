@@ -1,4 +1,4 @@
-package com.board;
+package com.board.ui;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

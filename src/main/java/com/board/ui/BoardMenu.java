@@ -1,4 +1,4 @@
-package com.board;
+package com.board.ui;
 
 import java.sql.Connection;
 import java.sql.SQLException;
