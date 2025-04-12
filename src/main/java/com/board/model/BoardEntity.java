@@ -17,6 +17,10 @@ public class BoardEntity {
 	 private List<BoardColumnEntity> boardColumns = new ArrayList<BoardColumnEntity>();
 	 
 	 
+	 public BoardColumnEntity getInitialColumn(){
+		 
+		 return boardColumns.stream().filter(c -> c.getKind().equals(BoardColumnKindEnum.INITIAL)).findFirst().orElseThrow();
+	 }
 
 	public Long getId() {
 		return id;

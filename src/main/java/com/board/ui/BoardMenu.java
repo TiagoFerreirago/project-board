@@ -5,11 +5,14 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.board.model.BoardColumnEntity;
+import com.board.model.BoardColumnKindEnum;
 import com.board.model.BoardEntity;
+import com.board.model.CardEntity;
 import com.board.persistence.dao.ConnectionConfig;
 import com.board.service.BoardColumnQueryService;
 import com.board.service.BoardQueryService;
 import com.board.service.CardQueryService;
+import com.board.service.CardService;
 
 public class BoardMenu {
 	
@@ -64,9 +67,17 @@ public class BoardMenu {
 		}
    }
 
-	private void createCard() {
+	private void createCard() throws SQLException {
 		
-		
+		CardEntity cardEntity = new CardEntity();
+		 System.out.println("Informe o título do card");
+		 cardEntity.setTitle(scanner.next());
+	     System.out.println("Informe a descrição do card");
+	     cardEntity.setDescription(scanner.next());
+	     cardEntity.setBoardColumn(boardEntity.getInitialColumn());
+	     try(Connection connection = ConnectionConfig.getConnection()){
+	    	 new CardService(connection).create(cardEntity);
+	     }
 	}
 
 	private void moveCardToNextColumn() {
@@ -138,7 +149,7 @@ public class BoardMenu {
                  System.out.println(c.blocked() ?
                          "Está bloqueado. Motivo: " + c.blockReason() :
                          "Não está bloqueado");
-                 System.out.printf("Já foi bloqueado %s vezes", c.blocksAmount());
+                 System.out.printf("Já foi bloqueado %s vezes\n", c.blocksAmount());
                  System.out.printf("Está no momento na coluna %s - %s\n", c.columnId(), c.columnName());}, 
 					 () -> System.out.printf("Não existe um card com o id %s\n", selectedCardId));
 		 }
