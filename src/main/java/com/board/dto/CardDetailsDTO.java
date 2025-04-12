@@ -1,4 +1,4 @@
-package com.board.persistence.dao;
+package com.board.dto;
 
 import java.time.OffsetDateTime;
 
