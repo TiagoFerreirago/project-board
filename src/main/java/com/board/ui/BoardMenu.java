@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import com.board.dto.BoardColumnInfoDTO;
 import com.board.model.BoardColumnEntity;
 import com.board.model.BoardColumnKindEnum;
 import com.board.model.BoardEntity;
@@ -80,9 +81,18 @@ public class BoardMenu {
 	     }
 	}
 
-	private void moveCardToNextColumn() {
+	private void moveCardToNextColumn() throws SQLException {
 		
-		
+		 System.out.println("Informe o id do card que deseja mover para a próxima coluna");
+		 Long cardId = scanner.nextLong();
+		 var boardColumnsInfo = boardEntity.getBoardColumns().stream()
+				 .map(bc -> new BoardColumnInfoDTO(bc.getId(), bc.getOrder(), bc.getKind())).toList();
+		 try(var connection = ConnectionConfig.getConnection()){
+			 new CardService(connection).moveToNextColumn(cardId, boardColumnsInfo);
+		 }
+		 catch(RuntimeException ex) {
+			 System.out.println(ex.getMessage());
+		 }
 	}
 
 	private void blockCard() {
