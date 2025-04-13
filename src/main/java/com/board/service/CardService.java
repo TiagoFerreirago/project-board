@@ -63,4 +63,31 @@ public class CardService {
 
 	}
 	
+	public void cancel(Long cardId, Long cancelColumnId, List<BoardColumnInfoDTO> boardColumnsInfo) throws SQLException {
+		try {
+			CardDAO dao = new CardDAO(connection);
+			CardDetailsDTO dto = dao.findById(cardId).orElseThrow(() ->new EntityNotFoundException("O card de id %s não foi encontrado".formatted(cardId)));
+			
+			if(dto.blocked()) {
+				String message = "O card %s está bloqueado, é necesário desbloquea-lo para mover".formatted(cardId);
+				throw new CardBlockedException(message);
+			}
+			var currentColumn = boardColumnsInfo.stream()
+					.filter(bc -> bc.id().equals(dto.columnId()))
+					.findFirst().orElseThrow(() -> new IllegalStateException("O card informado pertence a outro board"));
+			if(currentColumn.kind().equals(BoardColumnKindEnum.FINAL)) {
+				throw new CardFinishedException("O card já foi finalizado");
+			}
+			boardColumnsInfo.stream().filter(
+					bc -> bc.order() == currentColumn.order() + 1)
+					.findFirst().orElseThrow(() -> new IllegalStateException("O card está cancelado"));
+			dao.moveToColumn(cancelColumnId, cardId);
+			connection.commit();
+		}
+		catch(SQLException ex) {
+			connection.rollback();
+			throw ex;
+		}
+	}
+	
 }

@@ -2,10 +2,12 @@ package com.board.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.apache.commons.lang3.builder.ToStringExclude;
+
 
 public class BoardEntity {
 
@@ -19,7 +21,16 @@ public class BoardEntity {
 	 
 	 public BoardColumnEntity getInitialColumn(){
 		 
-		 return boardColumns.stream().filter(c -> c.getKind().equals(BoardColumnKindEnum.INITIAL)).findFirst().orElseThrow();
+		 return getFilteredColumn(bc -> bc.getKind().equals(BoardColumnKindEnum.INITIAL));
+	 }
+	 
+	 public BoardColumnEntity getCancelColumn() {
+		 return getFilteredColumn(bc -> bc.getKind().equals(BoardColumnKindEnum.CANCEL));
+	 }
+	 
+	 private BoardColumnEntity getFilteredColumn(Predicate<BoardColumnEntity>filter) {
+		 
+		 return boardColumns.stream().filter(filter).findFirst().orElseThrow();
 	 }
 
 	public Long getId() {

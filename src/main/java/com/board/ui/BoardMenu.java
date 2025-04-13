@@ -105,9 +105,20 @@ public class BoardMenu {
 		
 	}
 
-	private void cancelCard() {
+	private void cancelCard() throws SQLException {
 	
+		System.out.println("Informe o id do card que deseja mover para a coluna de cancelamento");
+		Long cardId = scanner.nextLong();
+		BoardColumnEntity cancelColumn = boardEntity.getCancelColumn();
+		var boardColumnsInfo = boardEntity.getBoardColumns().stream()
+				.map(bc -> new BoardColumnInfoDTO(bc.getId(), bc.getOrder(), bc.getKind())).toList();
+		try(var connection = ConnectionConfig.getConnection()){
+			new CardService(connection).cancel(cardId, cancelColumn.getId(), boardColumnsInfo);
 		
+		}
+		catch(RuntimeException ex) {
+			System.out.println(ex.getMessage());
+		}
 	}
 
 	private void showBoard() throws SQLException {
