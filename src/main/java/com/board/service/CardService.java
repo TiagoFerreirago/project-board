@@ -11,6 +11,7 @@ import com.board.exception.CardFinishedException;
 import com.board.exception.EntityNotFoundException;
 import com.board.model.BoardColumnKindEnum;
 import com.board.model.CardEntity;
+import com.board.persistence.dao.BlockDAO;
 import com.board.persistence.dao.CardDAO;
 
 public class CardService {
@@ -88,6 +89,38 @@ public class CardService {
 			connection.rollback();
 			throw ex;
 		}
+	}
+	
+	public void block(Long id, String reason, List<BoardColumnInfoDTO> boardColumnsInfo) throws SQLException {
+		
+		try{
+			CardDAO dao = new CardDAO(connection);
+			var optional = dao.findById(id);
+			CardDetailsDTO dto = optional.orElseThrow(() ->
+			new EntityNotFoundException("O card de id %s não foi encontrado".formatted(id)));
+			
+			if(dto.blocked()) {
+				String message = "O card %s já está bloqueado".formatted(id);
+				throw new CardBlockedException(message);
+			}
+			
+			var currentColumn = boardColumnsInfo.stream().filter(bc -> bc.id().equals(dto.columnId()))
+					.findFirst().orElseThrow();
+			if(currentColumn.kind().equals(BoardColumnKindEnum.FINAL) || currentColumn.kind().equals(BoardColumnKindEnum.CANCEL)){
+				String message = "O card está em uma coluna do tipo %s e não pode ser bloqueado".formatted(currentColumn.kind());
+				throw new IllegalStateException(message);
+			}
+			
+			BlockDAO blockDao = new BlockDAO(connection);
+			blockDao.block(reason, id);
+			connection.commit();
+		}
+		catch(SQLException ex) {
+			connection.rollback();
+			throw ex;
+		}
+		
+		
 	}
 	
 }
