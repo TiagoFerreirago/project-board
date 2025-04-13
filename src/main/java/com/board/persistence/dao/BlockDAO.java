@@ -27,6 +27,17 @@ public class BlockDAO {
 			
 		}
 	}
+	public void unblock(String reason, Long cardId) throws SQLException {
+		
+		 String sql = "UPDATE BLOCKS SET unblocked_at = ?, unblock_reason = ? WHERE card_id = ? AND unblock_reason IS NULL;";
+		 
+		 try(PreparedStatement statement = connection.prepareStatement(sql)){
+			 statement.setTimestamp(1, OffsetDateTimeConverter.toTimeStamp(OffsetDateTime.now()));
+			 statement.setString(2, reason);
+			 statement.setLong(3, cardId);
+			 statement.executeUpdate();
+		 }
+	}
 	
 	
 }
