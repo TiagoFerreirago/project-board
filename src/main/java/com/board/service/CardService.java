@@ -52,7 +52,7 @@ public class CardService {
 			}
 			var nextColumn = boardColumns.stream()
 					.filter(bc -> bc.order() == correntColumn.order() + 1)
-					.findFirst().orElseThrow();
+					.findFirst().orElseThrow(() -> new IllegalStateException("O card está cancelado!"));
 			dao.moveToColumn(nextColumn.id(), cardId); 
 			connection.commit();
 		}
